@@ -1,0 +1,13 @@
+__pycache__/
+
+# everythin within the PLANETS directory
+PLANETS/
+Phoenix/
+xsec/
+ARIEL/
+cia/
+.vscode/
+
+
+
+
