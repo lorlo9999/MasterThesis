@@ -5,5 +5,10 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"github.copilot.enable": {
+			"plaintext": true,
+			"markdown": true
+		}
+	}
 }
