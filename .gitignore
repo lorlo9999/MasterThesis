@@ -2,6 +2,9 @@ __pycache__/
 
 # everythin within the PLANETS directory
 PLANETS/
+thesis-plots/
+PhaseCurves/
+plots/
 Phoenix/
 xsec/
 ARIEL/
