@@ -42,10 +42,12 @@ obs = pd.DataFrame({
     "H Inventory [H_oceans]": [10, 20, 20, 30, 5, 5, 10, 20, 10, 5, 10, 20, 20, 20, 20],
     "Redox State [IW]":       [4, 4, 4, 2, 0, 4, 4, 0, 0, 4, 4, 4, 4, 2, 4],
     "MMW [g/mol]":            [53.05, 41.45, 57.86, 55.35, 34.93, 36.81, 46.02, 26.35, 25.39, 54.36, 60.00, 54.14, 40.00, 17.39, 25.32],
+    "T_day [K]":              [2495, 2567, 3023, 2935, 1218, 1303, 2254, 2390, 2571, 2441, 2717, 2850, 2803, 2734, 3193],
+    "T_night [K]":            [1095, 1234, 1337, 1242, 335, 408, 1023, 1189, 1214, 1048, 1235, 1309, 1113, 1212, 1518],
     "N_obs":                  [15, 13, 8, 8, 10000, 10000, 49, 35, 21, 32, 9, 8, 36, 33, 35],
     "N_bb":                   [18, 15, 8, 8, 9850, 9850, 53, 37, 21, 32, 10, 10, 36, 38, 34],
     "T_obs [hours]":          [345.60, 299.52, 53.76, 53.76, 468000.00, 468000.00, 1176.00, 840.00, 277.20, 422.40, 105.84, 94.08, 475.20, 435.60, 378.00],
-    "Retrieval Evidence":     [3.7, 4.0, 4.2, 4.0, np.nan, np.nan, 6.4, 3.6, np.nan, 6.7, 3.2, 2.7, 3.9, 3.5, 3.2],
+    "Retrieval Evidence":     [3.7, 4.0, 4.2, 4.0, np.nan, np.nan, 6.4, 3.6, 2.6, 6.7, 3.2, 2.7, 3.9, 3.5, 3.2],
 })
 
 # === Merge into supertable ===
@@ -60,7 +62,8 @@ col_order = [
     "T_eff [K]", "R_star [R_sun]", "[Fe/H] [dex]", "log_g [cgs]", "Age [Gyr]", "d [pc]",
     # Observational results
     "Case #", "Atmospheric Components", "P_surf [bar]", "H Inventory [H_oceans]",
-    "Redox State [IW]", "MMW [g/mol]", "N_obs", "N_bb", "T_obs [hours]", "Retrieval Evidence",
+    "Redox State [IW]", "MMW [g/mol]", "T_day [K]", "T_night [K]",
+    "N_obs", "N_bb", "T_obs [hours]", "Retrieval Evidence",
 ]
 df = df[col_order]
 
