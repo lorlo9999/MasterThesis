@@ -53,6 +53,18 @@ obs = pd.DataFrame({
 # === Merge into supertable ===
 df = obs.merge(planets, on="Planet", how="left").merge(stars, on="Planet", how="left")
 
+# === Gaussian scaling: N_eclipses / T_eclipses for 3-sigma detection ===
+# σ ∝ √N  =>  N_eclipses = ceil( N_obs × (3/σ)² )
+# T_eclipses [hours] = P [days]×24 + (N_eclipses − 2) × T_14 [hours]
+df["N_eclipses"] = np.ceil(df["N_obs"] * (3.0 / df["Retrieval Evidence"]) ** 2)
+df["T_eclipses [hours]"] = df["P [days]"] * 24 + (df["N_eclipses"] - 2) * df["T_14 [hours]"]
+
+# === Free evidence from phase curves (display only — not used for scaling above) ===
+# Each phase curve yields 2 secondary eclipses; σ ∝ √N  =>  σ_free = σ × √2
+df["Free Retrieval Evidence"] = df["Retrieval Evidence"] * np.sqrt(2)
+#replace displayed evidence column with free evidence
+df["Retrieval Evidence"] = df["Free Retrieval Evidence"]
+
 # === Reorder columns: Planet | Planetary Params | Stellar Params | Observational Results ===
 col_order = [
     "Planet",
@@ -64,6 +76,7 @@ col_order = [
     "Case #", "Atmospheric Components", "P_surf [bar]", "H Inventory [H_oceans]",
     "Redox State [IW]", "MMW [g/mol]", "T_day [K]", "T_night [K]",
     "N_obs", "N_bb", "T_obs [hours]", "Retrieval Evidence",
+    "N_eclipses", "T_eclipses [hours]"
 ]
 df = df[col_order]
 
