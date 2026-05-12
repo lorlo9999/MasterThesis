@@ -57,7 +57,7 @@ df = obs.merge(planets, on="Planet", how="left").merge(stars, on="Planet", how="
 # σ ∝ √N  =>  N_eclipses = ceil( N_obs × (3/σ)² )
 # T_eclipses [hours] = P [days]×24 + (N_eclipses − 2) × T_14 [hours]
 df["N_eclipses"] = np.ceil(df["N_obs"] * (3.0 / df["Retrieval Evidence"]) ** 2)
-df["T_eclipses [hours]"] = df["P [days]"] * 24 + (df["N_eclipses"] - 2) * df["T_14 [hours]"]
+df["T_eclipses [hours]"] = df["P [days]"] * 24 + (df["N_eclipses"] - 2) *df["T_14 [hours]"]
 
 # === Free evidence from phase curves (display only — not used for scaling above) ===
 # Each phase curve yields 2 secondary eclipses; σ ∝ √N  =>  σ_free = σ × √2

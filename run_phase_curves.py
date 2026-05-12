@@ -43,6 +43,7 @@ planet_names         = ["HD3167","K2141","LHS1478","TOI431","TOI500","TOI561","T
 planet_masses        = [4.73, 4.97, 2.33, 3.07, 1.42, 2.02, 3.48, 2.44]
 planet_distances     = [0.018, 0.007, 0.018, 0.011, 0.012, 0.011, 0.019, 0.012]
 planet_period        = [0.96, 0.28, 1.95, 0.49, 0.55, 0.45, 1.0, 0.55]
+planet_period_hours  = [p * 24 for p in planet_period]
 planet_radius        = [1.627, 1.510, 1.242, 1.277, 1.166, 1.397, 1.620, 1.496]
 T_transit_hours      = [1.61, 0.94, 0.71, 1.24, 0.99, 1.31, 1.5, 0.98]
 planet_transit       = [t * 3600 for t in T_transit_hours]
@@ -114,7 +115,8 @@ def run_one(name, H, iw, eff, N_pc, S="40"):
 
     phase_window = 0.65
     _period      = planet_period[idx]
-    phases = np.linspace(-phase_window * _period, phase_window * _period, 200)
+    sample_points = 100
+    phases = np.linspace(-phase_window * _period, phase_window * _period, sample_points)
 
     # pressure / temperature profiles
     if name in ("K2141"):
@@ -214,6 +216,7 @@ def run_one(name, H, iw, eff, N_pc, S="40"):
     ariel = pd.read_csv(f"./ARIEL/arielrad_{name}/tier2.csv", skiprows=6)
     wave          = ariel["Wavelength [um]"].values
     error_w_floor = ariel["Noise on Transit Floor [ppm]"].values * 1e-6
+    error_w_floor = ariel['Total Noise [ppm]'].values*1e-6
 
     fb2  = FluxBinner(wave)
     flux = np.zeros((len(hs._orbitals), len(wave)))
@@ -232,7 +235,7 @@ def run_one(name, H, iw, eff, N_pc, S="40"):
 
     time         = N_pc * planet_period[idx]
     dtsampled    = np.mean(hs._orbitals[1:] - hs._orbitals[:-1]) * 24
-    eff_eclipses = N_pc * dtsampled / T_transit_hours[idx]
+    eff_eclipses = N_pc * dtsampled  # σ₁ is per hour; scale by actual hours per point
 
     binned_flux = np.zeros(len(hs._orbitals))
     results_l3  = None
@@ -260,11 +263,16 @@ def run_one(name, H, iw, eff, N_pc, S="40"):
     before_ingress = np.arange(ingress_idx - 2, ingress_idx + 2)
     _err_night     = binned_err / np.sqrt(4)
 
-    while True:
+    best_rand, best_margin = None, -np.inf
+    for _ in range(10_000):
         rand = np.random.normal(binned_flux, binned_err)
         r1, r2, r3, r4 = rand[before_ingress]
-        if ((r1 + r2) / 2 + (r3 + r4) / 2) / 2 - _err_night > 1:
+        margin = ((r1 + r2) / 2 + (r3 + r4) / 2) / 2 - _err_night - 1
+        if margin > best_margin:
+            best_margin, best_rand = margin, rand
+        if margin > 0:
             break
+    rand = best_rand
 
     return hs._orbitals * 24, binned_flux, rand, binned_err, binned_wl, time
 

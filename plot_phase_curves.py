@@ -172,3 +172,40 @@ grid_path = f"{base_path}_grid.pdf"
 fig.savefig(grid_path, format="pdf", bbox_inches="tight")
 plt.close(fig)
 print(f"Saved: {grid_path}")
+
+# ── standalone example figure: K2-141b Case #88 ───────────────────────────────
+_target = next(
+    (e for e in plot_data if e["name"] == "K2141" and e["H"] == "20" and e["iw"] == "4"),
+    None,
+)
+if _target is not None:
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    orbitals_h  = _target["orbitals_h"]
+    binned_flux = _target["binned_flux"]
+    rand        = _target["rand"]
+    binned_err  = _target["binned_err"]
+    time_hours  = _target["time"] * 24
+    N_pc        = _target["N_pc"]
+    binned_wl   = _target["binned_wl"]
+
+    ax.plot(orbitals_h, binned_flux, color="black", linewidth=1.2,
+            label=f"Model  ({binned_wl:.2f} µm)")
+    ax.errorbar(orbitals_h, rand, yerr=binned_err,
+                fmt="o", color="red", markersize=4, alpha=0.7, linewidth=1.0,
+                label=f"Simulated obs.  (N={N_pc}, {time_hours:.0f} h)")
+    ax.axhline(1, color="black", linestyle="--", linewidth=0.7, label="Stellar baseline")
+
+    ax.set_xlabel("Time from transit centre (hours)", fontsize=13)
+    ax.set_ylabel("Normalised flux", fontsize=13)
+    ax.set_title("K2-141b  ·  Case #88", fontsize=13, loc="left")
+    ax.legend(fontsize=10, frameon=False)
+    ax.ticklabel_format(useOffset=False)
+    ax.tick_params(labelsize=11)
+
+    example_path = f"{base_path}_k2141_case88.pdf"
+    fig.savefig(example_path, format="pdf", bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved: {example_path}")
+else:
+    print("K2-141b Case #88 not found in data — skipping example figure.")
