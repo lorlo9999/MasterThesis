@@ -63,7 +63,7 @@ def bindown_single(w1, d1, w2, d2, output, noise, eclipses):
     df = (w2 + d2 / 2) - (w1 - d1 / 2)
     photogrid = np.array([[wf], [df]])
     fb = FluxBinner(photogrid[0], photogrid[1])
-    wl, val, err, *_ = fb.bindown(output[0], output[1], error=noise / np.sqrt(eclipses))
+    wl, val, err, *_ = fb.bindown(output[0], output[1], error= noise / np.sqrt(eclipses))
     return w1, w2, wl[0], val[0], err[0], df
 
 
@@ -216,6 +216,7 @@ def run_one(name, H, iw, eff, N_pc, S="40"):
     ariel = pd.read_csv(f"./ARIEL/arielrad_{name}/tier2.csv", skiprows=6)
     wave          = ariel["Wavelength [um]"].values
     error_w_floor = ariel["Noise on Transit Floor [ppm]"].values * 1e-6
+    #call it error with floor to avoid changing variables in the rest of the script
     error_w_floor = ariel['Total Noise [ppm]'].values*1e-6
 
     fb2  = FluxBinner(wave)
@@ -234,7 +235,9 @@ def run_one(name, H, iw, eff, N_pc, S="40"):
     ]
 
     time         = N_pc * planet_period[idx]
+    # time per phase point, in hours
     dtsampled    = np.mean(hs._orbitals[1:] - hs._orbitals[:-1]) * 24
+    # factor to scale noise by, considers stacked phase curves + scales by actual hours per point
     eff_eclipses = N_pc * dtsampled  # σ₁ is per hour; scale by actual hours per point
 
     binned_flux = np.zeros(len(hs._orbitals))

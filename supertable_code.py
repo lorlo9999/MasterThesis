@@ -47,7 +47,7 @@ obs = pd.DataFrame({
     "N_obs":                  [15, 13, 8, 8, 10000, 10000, 49, 35, 21, 32, 9, 8, 36, 33, 35],
     "N_bb":                   [18, 15, 8, 8, 9850, 9850, 53, 37, 21, 32, 10, 10, 36, 38, 34],
     "T_obs [hours]":          [345.60, 299.52, 53.76, 53.76, 468000.00, 468000.00, 1176.00, 840.00, 277.20, 422.40, 105.84, 94.08, 475.20, 435.60, 378.00],
-    "Retrieval Evidence":     [3.7, 4.0, 4.2, 4.0, np.nan, np.nan, 6.4, 3.6, 2.6, 6.7, 3.2, 2.7, 3.9, 3.5, 3.2],
+    "Retrieval Evidence":     [2.4, 1.7, 2.8, 2.5, np.nan, np.nan, 4.9, 1.9, 1.7, 4.8, 2.4, 2.1, 2.7, 2.1, 2.0],
 })
 
 # === Merge into supertable ===
@@ -56,14 +56,14 @@ df = obs.merge(planets, on="Planet", how="left").merge(stars, on="Planet", how="
 # === Gaussian scaling: N_eclipses / T_eclipses for 3-sigma detection ===
 # σ ∝ √N  =>  N_eclipses = ceil( N_obs × (3/σ)² )
 # T_eclipses [hours] = P [days]×24 + (N_eclipses − 2) × T_14 [hours]
-df["N_eclipses"] = np.ceil(df["N_obs"] * (3.0 / df["Retrieval Evidence"]) ** 2)
-df["T_eclipses [hours]"] = df["P [days]"] * 24 + (df["N_eclipses"] - 2) *df["T_14 [hours]"]
+df["N_eclipses"] = df["N_obs"]+1
+df["T_eclipses [hours]"] = df["P [days]"] * 24 + (df["N_eclipses"] - 2) * df["T_14 [hours]"]
 
 # === Free evidence from phase curves (display only — not used for scaling above) ===
 # Each phase curve yields 2 secondary eclipses; σ ∝ √N  =>  σ_free = σ × √2
-df["Free Retrieval Evidence"] = df["Retrieval Evidence"] * np.sqrt(2)
+#df["Free Retrieval Evidence"] = df["Retrieval Evidence"] * np.sqrt(2)
 #replace displayed evidence column with free evidence
-df["Retrieval Evidence"] = df["Free Retrieval Evidence"]
+#df["Retrieval Evidence"] = df["Free Retrieval Evidence"]
 
 # === Reorder columns: Planet | Planetary Params | Stellar Params | Observational Results ===
 col_order = [
