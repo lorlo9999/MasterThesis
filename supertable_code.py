@@ -48,8 +48,8 @@ obs = pd.DataFrame({
     "N_bb":                   [18, 15, 8, 8, 9850, 9850, 53, 37, 21, 32, 10, 10, 36, 38, 34],
     "T_obs [hours]":          [345.60, 299.52, 53.76, 53.76, 468000.00, 468000.00, 1176.00, 840.00, 277.20, 422.40, 105.84, 94.08, 475.20, 435.60, 378.00],
     "Retrieval Evidence":     [2.4, 1.7, 2.8, 2.5, np.nan, np.nan, 4.9, 1.9, 1.7, 4.8, 2.4, 2.1, 2.7, 2.1, 2.0],
-    "N_day":                  [25, 25, 4, 4, np.nan, np.nan, 25, 70, 45, 33, 4, 4, 55, 15, 75],
-    "Evidence_day":          [5.2, 4.7, , , np.nan, np.nan, 4.9, , 4.9, 4.8, , , 5.2, , 4.9],
+    "N_day":                  [25, 25, 11, 11, np.nan, np.nan, 25, 70, 45, 33, 16, 17, 55, 70, 75],
+    "Evidence_day":          [5.2, 4.7, 4.7, 4.8, np.nan, np.nan, 4.9, 5.2, 4.9, 4.8, 5.2, 4.9, 5.2, 5.1, 4.9],
     "A_obs":          [0.897, 0.890, 0.896, 0.893, np.nan, np.nan, 0.911, 0.904, 0.894, 0.906, 0.902, 0.896, 0.905, 0.912, 0.863],
     "σ_obs":          [0.179, 0.176, 0.158, 0.156, np.nan, np.nan, 0.183, 0.181, 0.176, 0.177, 0.171, 0.163, 0.180, 0.180, 0.172],
     "N_pc":          [6, 7, 4, 4,np.nan, np.nan, 18, 17, 12, 13, 4, 4, 15, 12, 29],
@@ -68,7 +68,8 @@ df["N_eclipses"] = df["N_obs"]+1
 df["T_eclipses [hours]"] = df["P [days]"] * 24 + (df["N_eclipses"] - 2) * 2.5 * df["T_14 [hours]"]
 df["T_day [hours]"] = df["P [days]"] * 24 + (df["N_day"] - 2) * 2.5 * df["T_14 [hours]"]
 
-print(df["N_day"], df["T_day [hours]"], df["Evidence_day"])
+i = input("Index: ")
+print(df["Case #"][int(i)], df["Evidence_day"][int(i)], df["N_day"][int(i)], df["T_day [hours]"][int(i)])
 
 # === Free evidence from phase curves (display only — not used for scaling above) ===
 # Each phase curve yields 2 secondary eclipses; σ ∝ √N  =>  σ_free = σ × √2
