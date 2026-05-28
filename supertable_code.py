@@ -44,7 +44,7 @@ obs = pd.DataFrame({
     "MMW [g/mol]":            [53.05, 41.45, 57.86, 55.35, 34.93, 36.81, 46.02, 26.35, 25.39, 54.36, 60.00, 54.14, 40.00, 17.39, 25.32],
     "T_day [K]":              [2495, 2567, 3023, 2935, 1218, 1303, 2254, 2390, 2571, 2441, 2717, 2850, 2803, 2734, 3193],
     "T_night [K]":            [1095, 1234, 1337, 1242, 335, 408, 1023, 1189, 1214, 1048, 1235, 1309, 1113, 1212, 1518],
-    "N_obs":                  [15, 13, 8, 8, 10000, 10000, 49, 35, 21, 32, 9, 8, 36, 33, 35],
+    "N_obs":                  [15, 13, 9, 8, 10000, 10000, 52, 37, 22, 34, 10, 8, 38, 33, 39],
     "N_bb":                   [18, 15, 8, 8, 9850, 9850, 53, 37, 21, 32, 10, 10, 36, 38, 34],
     "T_obs [hours]":          [345.60, 299.52, 53.76, 53.76, 468000.00, 468000.00, 1176.00, 840.00, 277.20, 422.40, 105.84, 94.08, 475.20, 435.60, 378.00],
     "Retrieval Evidence":     [2.4, 1.7, 2.8, 2.5, np.nan, np.nan, 4.9, 1.9, 1.7, 4.8, 2.4, 2.1, 2.7, 2.1, 2.0],
@@ -68,8 +68,7 @@ df["N_eclipses"] = df["N_obs"]+1
 df["T_eclipses [hours]"] = df["P [days]"] * 24 + (df["N_eclipses"] - 2) * 2.5 * df["T_14 [hours]"]
 df["T_day [hours]"] = df["P [days]"] * 24 + (df["N_day"] - 2) * 2.5 * df["T_14 [hours]"]
 
-i = input("Index: ")
-print(df["Case #"][int(i)], df["Evidence_day"][int(i)], df["N_day"][int(i)], df["T_day [hours]"][int(i)])
+print(df["N_eclipses"], df["T_eclipses [hours]"])
 
 # === Free evidence from phase curves (display only — not used for scaling above) ===
 # Each phase curve yields 2 secondary eclipses; σ ∝ √N  =>  σ_free = σ × √2
