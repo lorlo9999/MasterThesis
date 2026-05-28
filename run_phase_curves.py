@@ -281,7 +281,8 @@ def run_one(name, H, iw, eff, N_pc, S="40"):
 
 
 # ── main: collect results and build stacked figure ────────────────────────────
-df          = pd.read_csv("combined_nightside_results.csv", index_col=0)
+df          = pd.read_csv("combined_nightside_results_for_phase_curves.csv", index_col=0)
+
 rows_to_run = [(i, row) for i, row in df.iterrows()]
 n_plots     = len(rows_to_run)
 
