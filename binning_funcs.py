@@ -2,8 +2,10 @@ import numpy as np
 from taurex.binning import FluxBinner
 
 def bindown_single(w1, d1, w2, d2, output, noise, eclipses):
-    wf = (w1 + w2) / 2
-    df = (w2 + d2/2) - (w1 - d1/2)
+    left_edge = w1 - d1/2
+    right_edge = w2 + d2/2
+    wf = (left_edge + right_edge) / 2
+    df = right_edge - left_edge
 
     photogrid = np.array([[wf], [df]])
 
@@ -32,14 +34,7 @@ def make_next_level_points(results):
         left_bin  = results[i]
         right_bin = results[i + 1]
 
-        # left edge of combined bin
-        w1 = left_bin[2] - left_bin[5] / 2
-        # right edge of combined bin
-        w2 = right_bin[2] + right_bin[5] / 2
-
-        width = w2 - w1
-
-        new_points.append((w1, width, w2, width))
+        new_points.append((left_bin[2], left_bin[5], right_bin[2], right_bin[5]))
 
     return new_points
 
@@ -51,6 +46,26 @@ def bindown_multiple(output, noise, wlgrid, fpfs, eclipses, name, *new_points):
         all_results.append(out_i)
 
     return all_results
+
+def bindown_above(threshold_um, wl_grid, wb_grid, output, noise, eclipses):
+    """
+    Combine all tier2 bins with centre > threshold_um into a single bin.
+    Returns (wl_centre, val, err, df).
+    """
+    mask = wl_grid > threshold_um
+    wl_sel = wl_grid[mask]
+    wb_sel = wb_grid[mask]
+    left_edge  = (wl_sel - wb_sel / 2).min()
+    right_edge = (wl_sel + wb_sel / 2).max()
+    wf = (left_edge + right_edge) / 2
+    df = right_edge - left_edge
+
+    fb = FluxBinner(np.array([wf]), np.array([df]))
+    wl_out, val, err, *_ = fb.bindown(
+        output[0], output[1],
+        error=noise / np.sqrt(eclipses)
+    )
+    return wl_out[0], val[0], err[0], df
 
 def create_point(w1, w2):
     wb1 = wb[np.argmin(np.abs(wl - w1))]
