@@ -65,7 +65,7 @@ df = obs.merge(planets, on="Planet", how="left").merge(stars, on="Planet", how="
 # σ ∝ √N  =>  N_eclipses = ceil( N_obs × (3/σ)² )
 # T_eclipses [hours] = P [days]×24 + (N_eclipses − 2) × T_14 [hours]
 df["N_eclipses"] = df["N_obs"]+1
-df["T_eclipses [hours]"] = (df["N_eclipses"]) * 2.5 * df["T_14 [hours]"]
+df["T_eclipses [hours]"] = df["N_eclipses"] * 2.5 * df["T_14 [hours]"]
 df["T_day [hours]"] = (df["N_day"]) * 2.5 * df["T_14 [hours]"]
 
 i = int(input("index: "))
