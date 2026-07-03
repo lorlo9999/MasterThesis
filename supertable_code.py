@@ -66,11 +66,13 @@ df = obs.merge(planets, on="Planet", how="left").merge(stars, on="Planet", how="
 # T_eclipses [hours] = P [days]×24 + (N_eclipses − 2) × T_14 [hours]
 df["N_eclipses"] = df["N_obs"]+1
 df["T_eclipses [hours]"] = df["N_eclipses"] * 2.5 * df["T_14 [hours]"]
-df["T_day [hours]"] = (df["N_day"]) * 2.5 * df["T_14 [hours]"]
+df["T_day [hours]"] = df["N_day"] * 2.5 * df["T_14 [hours]"]
 
-i = int(input("index: "))
-print(df["T_eclipses [hours]"][i])
-print(df["T_day [hours]"][i])
+df["T_pc [hours]"] = df["N_pc"] * df["P [days]"] * 24
+
+#i = int(input("index: "))
+#print(df["T_eclipses [hours]"][i])
+#print(df["T_day [hours]"][i])
 
 # === Free evidence from phase curves (display only — not used for scaling above) ===
 # Each phase curve yields 2 secondary eclipses; σ ∝ √N  =>  σ_free = σ × √2
@@ -89,7 +91,7 @@ col_order = [
     "Case #", "Atmospheric Components", "P_surf [bar]", "H Inventory [H_oceans]",
     "Redox State [IW]", "MMW [g/mol]", "T_day [K]", "T_night [K]",
     "N_obs", "N_bb", "T_obs [hours]", "Retrieval Evidence",
-    "N_eclipses", "T_eclipses [hours]","N_day", "T_day [hours]", "Evidence_day", "A_obs", "σ_obs", "N_pc", "A_obs_AIRS", "σ_obs_AIRS", "N_pc_AIRS",
+    "N_eclipses", "T_eclipses [hours]","N_day", "T_day [hours]", "T_pc [hours]", "Evidence_day", "A_obs", "σ_obs", "N_pc", "A_obs_AIRS", "σ_obs_AIRS", "N_pc_AIRS",
 ]
 df = df[col_order]
 
